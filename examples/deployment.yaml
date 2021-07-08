@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notify
+  labels:
+    app: notify
+    app.kubernetes.io/name: notify
+    app.kubernetes.io/version: "1.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "notify"
+  template:
+    metadata:
+      labels:
+        app: "notify"
+    spec:
+      serviceAccountName: k8s-job-notifier-sa
+      containers:
+      - name: notify
+        image: sho2010/notify:latest
+        imagePullPolicy: IfNotPresent
+
