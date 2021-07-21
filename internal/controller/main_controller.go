@@ -4,6 +4,8 @@ import (
 	"context"
 	"log"
 
+	"github.com/Sho2010/k8s-job-notifier/internal/event"
+	"github.com/Sho2010/k8s-job-notifier/internal/handler"
 	batchv1 "k8s.io/api/batch/v1"
 	batchv1beta1 "k8s.io/api/batch/v1beta1"
 	v1 "k8s.io/api/core/v1"
@@ -64,6 +66,19 @@ func (c *MainController) deleteEvent(ctx context.Context, job *batchv1.Job) {
 }
 
 func (c *MainController) sendEvent(ctx context.Context, job *batchv1.Job) {
+	e := event.Event{
+		Namespace: job.Namespace,
+		Type:      job.TypeMeta.Kind,
+		Resource:  job,
+	}
+
+	log.Println(e)
+	h, err := handler.CreateHandler()
+	if err != nil {
+		return
+	}
+	go h.Handle(e)
+
 	log.Printf("job event: %s, %s", job.GetName(), job.Status.String())
 }
 
