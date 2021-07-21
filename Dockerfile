@@ -12,6 +12,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /go/bin/app -v
 #---
 
 FROM gcr.io/distroless/base
+COPY --chown=nonroot:nonroot --from=build-env /go/bin/app /
+USER nonroot
 
-COPY --from=build-env /go/bin/app /
 CMD ["/app"]
