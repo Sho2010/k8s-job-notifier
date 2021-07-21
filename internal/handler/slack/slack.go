@@ -27,11 +27,15 @@ type Slack struct {
 
 // Handle handles the notification.
 func (s *Slack) Handle(e event.Event) {
-	log.Printf("slack error: %s\n", s.Token)
-
 	// job createのときはconditionsが空でくる、他にいい判定方法があればそれに変える
 	job := e.Resource.(*batchv1.Job)
 	if len(job.Status.Conditions) == 0 {
+		return
+	}
+
+	// TODO: 通知するイベントタイプを設定できるようにする
+	if job.Status.Conditions[0].Type != batchv1.JobFailed {
+		log.Printf("ignore other than failed\n")
 		return
 	}
 
