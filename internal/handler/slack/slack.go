@@ -38,6 +38,11 @@ const (
 	//
 	// value example: "Complete,Failed"
 	NotifyConditionAnnotation = annotationPrefix + "conditions"
+
+	// EnabledAnnotation is annotation key of enabled slack notification
+	//
+	// value: true/false
+	EnabledAnnotation = annotationPrefix + "enabled"
 )
 
 // Handle handles the notification.
