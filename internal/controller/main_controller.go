@@ -2,7 +2,6 @@ package controller
 
 import (
 	"context"
-	"log"
 
 	"github.com/Sho2010/k8s-job-notifier/internal/event"
 	"github.com/Sho2010/k8s-job-notifier/internal/handler"
@@ -62,7 +61,7 @@ func (c *MainController) Run() {
 }
 
 func (c *MainController) deleteEvent(ctx context.Context, job *batchv1.Job) {
-	log.Printf("job event: %s, %s", job.GetName(), job.Status.String())
+	// log.Printf("job event: %s, %s", job.GetName(), job.Status.String())
 }
 
 func (c *MainController) sendEvent(ctx context.Context, job *batchv1.Job) {
@@ -72,14 +71,11 @@ func (c *MainController) sendEvent(ctx context.Context, job *batchv1.Job) {
 		Resource:  job,
 	}
 
-	log.Println(e)
 	h, err := handler.CreateHandler()
 	if err != nil {
 		return
 	}
 	go h.Handle(e)
-
-	log.Printf("job event: %s, %s", job.GetName(), job.Status.String())
 }
 
 func (c *MainController) cronjobEvent(ctx context.Context, cj *batchv1beta1.CronJob) {

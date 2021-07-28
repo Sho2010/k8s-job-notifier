@@ -54,16 +54,14 @@ func (s *Slack) Handle(e event.Event) {
 	if len(job.Status.Conditions) == 0 {
 		return
 	}
-
 	annotations := job.GetAnnotations()
 
-	notifyCondisions := strings.Split(annotations[ChannelAnnotation], ",")
 
 	var notifyCondisions []string
-	if len(annotations[ChannelAnnotation]) == 0 {
+	if len(annotations[NotifyConditionAnnotation]) == 0 {
 		notifyCondisions = s.NotifyCondisions
 	} else {
-		notifyCondisions = strings.Split(annotations[ChannelAnnotation], ",")
+		notifyCondisions = strings.Split(annotations[NotifyConditionAnnotation], ",")
 	}
 
 	isSend := false
@@ -83,11 +81,13 @@ func (s *Slack) Handle(e event.Event) {
 		log.Printf("ignore\n")
 		return
 	}
+
 	channel := annotations[ChannelAnnotation]
 	if len(channel) == 0 {
 		channel = s.DefaultChannel
+	} else {
+		log.Printf("channel annotation find: %s\n", annotations[ChannelAnnotation])
 	}
-
 	attachment := buildAttachment(e, s)
 
 	client := slack.New(s.Token)
