@@ -7,11 +7,25 @@ import (
 )
 
 func CreateHandler() (Handler, error) {
-	s := slack.Slack{
-		Token:   os.Getenv("WEBHOOK_URL"),
-		Channel: "#bot_sandbox",
-		Title:   "test",
+	h, err := CreateSlackHandler()
+
+	if err != nil {
+		return nil, err
 	}
 
-	return &s, nil
+	return h, nil
+}
+
+func CreateSlackHandler() (Handler, error) {
+	dc := os.Getenv("DEFAULT_CHANNEL")
+	if len(dc) == 0 {
+		dc = "#bot_sandbox"
+	}
+
+	return &slack.Slack{
+		Token:            os.Getenv("SLACK_TOKEN"),
+		DefaultChannel:   dc,
+		Title:            "job notify",
+		NotifyCondisions: []string{"Failed"},
+	}, nil
 }
