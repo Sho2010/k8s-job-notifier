@@ -37,7 +37,7 @@ const (
 	// NotifyConditionAnnotation is
 	//
 	// value example: "Complete,Failed"
-	NotifyConditionAnnotation = annotationPrefix + "condition"
+	NotifyConditionAnnotation = annotationPrefix + "conditions"
 )
 
 // Handle handles the notification.
@@ -52,13 +52,23 @@ func (s *Slack) Handle(e event.Event) {
 
 	annotations := job.GetAnnotations()
 
-	notifyCondisions := strings.Split(",", annotations[ChannelAnnotation])
+	notifyCondisions := strings.Split(annotations[ChannelAnnotation], ",")
+
+	var notifyCondisions []string
+	if len(annotations[ChannelAnnotation]) == 0 {
+		notifyCondisions = s.NotifyCondisions
+	} else {
+		notifyCondisions = strings.Split(annotations[ChannelAnnotation], ",")
+	}
+
 	isSend := false
+	jobCon := strings.ToLower(string(job.Status.Conditions[0].Type))
+
 	for _, con := range notifyCondisions {
 		con = strings.TrimSpace(con)
 		con = strings.ToLower(con)
 
-		if con == "" {
+		if con == jobCon {
 			isSend = true
 			break
 		}

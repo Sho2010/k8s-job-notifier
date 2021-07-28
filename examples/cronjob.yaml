@@ -14,6 +14,12 @@ spec:
             command:
             - /bin/sh
             - -c
-            - date; echo Hello from the Kubernetes cluster
+            - |
+              num=$(shuf -i 0-10 -n 1)
+              echo "sleep $num"
+              sleep $num
+              result=$(shuf -i 0-1 -n 1)
+              echo "result $result"
+              test $result -eq 0
           restartPolicy: OnFailure
 
