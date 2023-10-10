@@ -9,6 +9,12 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    groups:
+      k8s_client:
+        patterns:
+        - "k8s.io/api"
+        - "k8s.io/apimachinery"
+        - "k8s.io/client-go"
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
