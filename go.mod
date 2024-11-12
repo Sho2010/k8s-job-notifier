@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
-	github.com/slack-go/slack v0.12.3
+	github.com/slack-go/slack v0.12.5
 	k8s.io/api v0.28.2
 	k8s.io/apimachinery v0.28.2
 	k8s.io/client-go v0.28.2
